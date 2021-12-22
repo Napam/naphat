@@ -1,28 +1,15 @@
 <template>
-  <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-  <TextCycler :texts="texts" :interval="3500"/>
-  <h1>Developer</h1>
+  <TextCycler :texts="texts"/>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
 import TextCycler from './components/TextCycler.vue'
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    TextCycler
-  },
-  setup () {
-    const texts = [
-      'Hello, welcome',
-      'Hei, velkommen',
-      'ยินดีต้อนรับ',
-      'Kisssshaa'
-    ]
-    return { texts }
-  }
-})
+const texts = [
+  'Good evening',
+  'I am Naphat',
+  'Welcome'
+]
 </script>
 
 <style lang="scss">
