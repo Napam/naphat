@@ -18,8 +18,8 @@ const props = defineProps({
     type: Number
   },
   animationType: {
-    default: () => 'scrollUp',
-    type: String as PropType<'fade' | 'upAndDown' | 'scrollUp'>
+    default: () => 'upAndUp',
+    type: String as PropType<'fade' | 'upAndDown' | 'upAndUp'>
   },
   animationSpeed: {
     default: () => 'auto',
@@ -75,19 +75,21 @@ if (props.animationSpeed === 'auto') {
     opacity: 1;
   }
 }
-.scrollUp {
-  &-enter-from, &-leave-to {
-    transform: translateY(-20px);
+.upAndUp {
+  &-enter-from {
+    transform: translateY(2rem);
     opacity: 0;
   }
-
+  &-enter-to, &-leave-from {
+    transform: translateY(0px);
+    opacity: 1;
+  }
   &-leave-active, &-enter-active {
     transition: all v-bind(transitionTime);
   }
-
-  &-leave-from, &-enter-to {
-    transform: translateY(0px);
-    opacity: 1;
+  &-leave-to {
+    opacity: 0;
+    transform: translateY(-2rem);
   }
 }
 </style>

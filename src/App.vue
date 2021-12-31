@@ -1,14 +1,18 @@
 <template>
+  <NavBar>
+  </NavBar>
   <TextCycler :texts="texts"/>
 </template>
 
 <script lang="ts" setup>
 import TextCycler from './components/TextCycler.vue'
+import NavBar from './components/NavBar.vue'
+import { getPartOfDay } from './utils'
 
 const texts = [
-  'Good evening',
+  'Good ' + getPartOfDay(),
   'I am Naphat',
-  'Welcome'
+  'Welcome to my site'
 ]
 </script>
 
@@ -19,6 +23,13 @@ const texts = [
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+.NavBar {
+  margin-bottom: 4rem;
+}
+
+body {
+  margin: 0px;
 }
 </style>
