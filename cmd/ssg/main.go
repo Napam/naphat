@@ -77,7 +77,11 @@ func main() {
 		logger.Info("Wrote page", slog.String("url", p.Path), slog.String("file", outPath))
 	}
 
-	if err := copyDir("web/static", "docs/static"); err != nil {
+	if err := copyDir("web/static", "docs/static", func(rel string) bool {
+		// web/static/.gitignore (spares only itself) would otherwise make
+		// every built asset in docs/static/ invisible to git.
+		return rel != ".gitignore"
+	}); err != nil {
 		logger.Error("Could not copy static assets", slog.Any("error", err))
 		os.Exit(1)
 	}
@@ -85,8 +89,9 @@ func main() {
 }
 
 // copyDir copies the src directory tree (files and dirs) into dst, preserving
-// the directory structure (including nested dirs like page-files/).
-func copyDir(src, dst string) error {
+// the directory structure (including nested dirs like page-files/). Files for
+// which shouldCopy returns false are skipped (directories still get created).
+func copyDir(src, dst string, shouldCopy func(rel string) bool) error {
 	return filepath.WalkDir(src, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
@@ -96,6 +101,9 @@ func copyDir(src, dst string) error {
 			return err
 		}
 		if rel == "." {
+			return nil
+		}
+		if !d.IsDir() && !shouldCopy(rel) {
 			return nil
 		}
 		target := filepath.Join(dst, rel)
