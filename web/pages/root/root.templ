@@ -1,0 +1,79 @@
+package root
+
+import (
+	"naphatsite"
+	"naphatsite/lib/templutils"
+	"naphatsite/web/layouts"
+)
+
+const (
+	imgBottomMarginClass = "mb-2"
+)
+
+templ RootPage() {
+	@layouts.Base(layouts.LargeContentWidth) {
+		<div class="flex w-full flex-col gap-10 lg:flex-row">
+			<div class="flex-1">
+				<!-- Who is this man -->
+				<a href="articles/who-is-this-man.html" class="block h-80 w-full flex-1 bg-gray-200 hover:cursor-pointer lg:w-120">
+					<img class={ templutils.JoinClasses("size-full object-cover object-[0px_40%]", imgBottomMarginClass) } src={ naphatsite.StaticRootPath("static/assets/naphat-portrait-2.png") }/>
+					<h1 class="text-6xl font-bold">
+						Who is this man?
+					</h1>
+				</a>
+			</div>
+			<!-- Apato ad -->
+			<a href="articles/apato-ad.html">
+				<div
+					class={ templutils.JoinClasses("flex h-80 items-center justify-center bg-emerald-100 p-2 dark:bg-emerald-300", imgBottomMarginClass) }
+				>
+					<apato-logo-wide class="shadow-2xl" height="100"></apato-logo-wide>
+				</div>
+				<h1 class="font-sans text-5xl font-bold">
+					Find your dream estate through Apato
+				</h1>
+			</a>
+		</div>
+		<div class="flex w-full flex-col gap-4 bg-cyan-200 p-10 font-mono text-gray-900 dark:bg-cyan-400">
+			<!-- Backwego template ad -->
+			<p class="mb-2 text-2xl font-bold">
+				Experience the best of Golang fullstack development!
+			</p>
+			<div class="flex items-center">
+				<p class="flex-1 text-xl">
+					Use the Backwego Template for <span class="animate-pulse underline">FREE</span> from
+					<a class="text-blue-600 hover:underline" href="https://github.com/Napam/backwego-template">https://github.com/Napam/backwego-template</a>
+				</p>
+				<img class="size-20" src={ naphatsite.StaticRootPath("static/assets/gopher-running-filled-white.svg") }/>
+			</div>
+		</div>
+		<div class="flex w-full flex-row gap-10">
+			<div class="flex-1">
+				<div class="mb-2 h-60 w-100 flex-1 bg-gray-200">img placeholder</div>
+				<h1 class="text-6xl font-bold">
+					Man was on a vacation!
+				</h1>
+			</div>
+			<div>
+				<div class="mb-2 h-60 shrink bg-gray-200">img placeholder</div>
+				<h1 class="text-5xl font-bold">
+					Hottest tech you must know
+				</h1>
+			</div>
+		</div>
+		<div class="flex w-full flex-row gap-10">
+			<div class="flex-1">
+				<div class="mb-2 h-60 w-100 flex-1 bg-gray-200">img placeholder</div>
+				<h1 class="text-5xl font-extrabold">
+					Scientists say this is the best resume of all time
+				</h1>
+			</div>
+			<div class="flex-1">
+				<div class="mb-2 h-60 w-100 flex-1 bg-red-300">img placeholder</div>
+				<h1 class="font-sans text-4xl font-bold">
+					Setup Typst documents using typst-templates!
+				</h1>
+			</div>
+		</div>
+	}
+}

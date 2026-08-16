@@ -1,0 +1,182 @@
+package whoisthisman
+
+import (
+	"naphatsite"
+	"naphatsite/web/layouts"
+	"naphatsite/web/lib/templcomponents/aisummary"
+)
+
+templ ContactIcons() {
+	<ul class="flex items-center gap-3">
+		<li>
+			<a href="https://github.com/Napam" aria-label="Github" title="Github" class="inline-flex">
+				<github-icon></github-icon>
+			</a>
+		</li>
+		<li>
+			<a href="https://www.linkedin.com/in/naphat-amundsen" aria-label="LinkedIn" title="LinkedIn" class="inline-flex">
+				<linkedin-icon></linkedin-icon>
+			</a>
+		</li>
+		<li>
+			<a href="mailto:naphat@live.no" aria-label="Email" title="Email" class="inline-flex">
+				<email-icon></email-icon>
+			</a>
+		</li>
+	</ul>
+}
+
+templ Page() {
+	@layouts.Base(layouts.SmallContentWidth) {
+		<div class="mt-4">
+			<header class="mb-6">
+				<div class="mb-4">
+					<h1 class="mb-4 text-4xl font-bold tracking">Naphat Amundsen</h1>
+					<p class="mb-4 text-xl">
+						A curious fullstack developer who enjoys doing things he doesn't
+						know how to do. While currently living in Bergen, Norway, he
+						occasionally wonders why he is putting up with being rained on
+						constantly.
+					</p>
+					@ContactIcons()
+				</div>
+				<div class="text-gray-500 dark:text-neutral-400">
+					<img
+						class="mb-2 size-full h-160 object-cover object-[0px_100%]"
+						src={ naphatsite.StaticRootPath("static/assets/naphat-portrait-2.png") }
+					/>
+					<p class="mb-2">A portrait of Naphat</p>
+					<dl class="text-sm font-thin">
+						<div class="flex flex-row gap-2">
+							<dt>Photo:</dt>
+							<dd>Tormod from Visito</dd>
+						</div>
+					</dl>
+				</div>
+			</header>
+			<div class="mb-8">
+				<p class="text-gray-400">Published Saturday 8. August 2026</p>
+				<p class="text-gray-400">Written by Naphat Amundsen</p>
+			</div>
+			<div class="flex flex-col gap-8">
+				@aisummary.Summary([]string{
+					"Born in Bangkok, moved to Norway young. Speaks Norwegian, English and Thai; keeps trying (and mostly failing) to learn Japanese so he can watch anime without subtitles.",
+					"BSc in mathematics from University of Tromsø, MSc in machine learning from University of Bergen.",
+					"Started as a fullstack dev at Stacc Insight AS, covering backend, infrastructure and security.",
+					"IslandGarden AS as senior systems developer and technical lead, where he ran a real machine learning project among other things.",
+					"Now Senior Consultant at Visito AS, working on AI-based solutions.",
+				})
+				<section class="flex flex-col gap-4 text-lg">
+					<p>
+						Born in Bangkok, Thailand he moved to Norway when he was young.
+						Thus, he got the knowledge of multiple languages for free. He
+						reads, writes and speaks Norwegian, English and Thai. He attempts
+						to learn Japanese in order to one day fulfill his dream of watching
+						anime without subtitles, but it has so far been a fruitless
+						endeavor accompanied by Duolingo.
+					</p>
+				</section>
+				<div>
+					<section class="flex flex-col gap-6 text-lg">
+						<h2 class="text-2xl font-semibold">Career</h2>
+						<p>
+							He finished a Bachelors of Science in mathematics at the
+							University of Tromsø, which was then followed up with a Master of
+							Science at the University of Bergen specializing in Machine
+							Learning.
+						</p>
+						<p>
+							- I work as a software developer. I started working
+							professionally at Stacc Insight AS in 2012. It was my first
+							workplace straight out of my masters. I had barely done any
+							kind of software engineering before, so it was quite a lot to
+							learn for me.
+						</p>
+						<p>
+							At Stacc Insight AS he worked as a full-stack developer, working
+							with backend, infrastructure and frontend. He quickly became well
+							versed in backend, infrastructure and security, pioneering better
+							security posture and development standards.
+						</p>
+						<div class="text-gray-500 dark:text-neutral-400">
+							<img class="mb-2" src={ naphatsite.StaticRootPath("static/assets/stacc-office-image.jpg") }/>
+							<p class="mb-2 text-sm">The Stacc offices</p>
+							<dl class="text-sm font-thin">
+								<div class="flex flex-row gap-2">
+									<dt>Photo:</dt>
+									<dd>GC Rieber</dd>
+								</div>
+							</dl>
+						</div>
+						<p>
+							After a two year run at Stacc Insight AS a fellow student from
+							University of Bergen reached out to him, asking if he wanted to
+							work with him at IslandGarden AS.
+						</p>
+						<p>
+							- I said yes. It was good timing. I felt I needed to get exposed
+							to new technologies and ways of working.
+						</p>
+						<p>
+							He then started working at IslandGarden AS. A small IT firm
+							within the W. Giertsen group. He became the technological lead as
+							well as being a system developer, having a central role shaping
+							the solutions at IslandGarden.
+						</p>
+						<p>
+							- It was fun while it lasted. I actually got to do a real machine
+							learning project there too. I learned a lot being there as I got
+							so much freedom doing technological decisions.
+						</p>
+						<div class="text-gray-500 dark:text-neutral-400">
+							<img class="mb-2" src={ naphatsite.StaticRootPath("static/assets/nygardsviken-1.jpg") }/>
+							<p class="mb-2 text-sm">
+								IslandGarden office was at the W. Giertsen facilities.
+							</p>
+							<dl class="text-sm font-thin">
+								<div class="flex flex-row gap-2">
+									<dt>Photo:</dt>
+									<dd>W. Giertsen Vannteknologi</dd>
+								</div>
+							</dl>
+						</div>
+						<div class="flex gap-4">
+							<p>
+								Today, Naphat works as a Senior Consultant at Visito AS, a
+								Bergen based IT consultancy, delivering projects requiring
+								everything from fullstack software development to machine
+								learning and AI.
+							</p>
+							<div class="flex flex-col items-center text-gray-400 dark:text-neutral-400">
+								<img class="mb-2 w-140" src={ naphatsite.StaticRootPath("static/assets/visito.ico") }/>
+								<dl class="text-sm font-thin">
+									<div class="flex flex-row gap-2">
+										<dt>Photo:</dt>
+										<dd>visito.no</dd>
+									</div>
+								</dl>
+							</div>
+						</div>
+						<div class="">
+							<div class="text-gray-400 dark:text-neutral-400">
+								<img class="mb-2 w-140" src={ naphatsite.StaticRootPath("static/assets/naphat-portrait-wide.jpg") }/>
+								<p class="mb-2 text-sm">
+									Naphat standing on the balcony of the Visito offices at Vaskerelven in Bergen.
+								</p>
+								<dl class="text-sm font-thin">
+									<div class="flex flex-row gap-2">
+										<dt>Photo:</dt>
+										<dd>Tormod from Visito</dd>
+									</div>
+								</dl>
+							</div>
+						</div>
+						<div>
+							@ContactIcons()
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	}
+}

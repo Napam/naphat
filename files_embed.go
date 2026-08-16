@@ -1,0 +1,34 @@
+//go:build !noembed
+
+package naphatsite
+
+import (
+	"embed"
+	"io/fs"
+
+	"github.com/go-chi/chi/v5"
+	"naphatsite/lib/hashfs"
+)
+
+//go:embed web/static/*
+var webFS embed.FS
+
+var hashFS *hashfs.FS
+
+func init() {
+	stripped, err := fs.Sub(webFS, "web")
+	if err != nil {
+		panic("failed to strip prefix: " + err.Error())
+	}
+	hashFS = hashfs.NewFS(stripped)
+}
+
+// StaticRootPath returns a root-relative path with content hash for cache busting.
+func StaticRootPath(path string) string {
+	return "/" + hashFS.HashName(path)
+}
+
+// SetupStatic registers the static file server on the router.
+func SetupStatic(r chi.Router) {
+	r.Handle("/static/*", hashfs.FileServer(hashFS))
+}

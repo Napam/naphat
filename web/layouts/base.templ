@@ -1,0 +1,36 @@
+package layouts
+
+import (
+	"naphatsite"
+	"naphatsite/lib/templutils"
+)
+
+const (
+	LargeContentWidth  = "max-w-4xl"
+	MediumContentWidth = "max-w-2xl"
+	SmallContentWidth  = "max-w-xl"
+)
+
+templ Base(pageWidthClass string) {
+	<html class="dark">
+		<head>
+			<title>Naphat Amundsen</title>
+			<link rel="stylesheet" id="tailwindcss" href={ naphatsite.StaticRootPath("static/tailwind.css") }/>
+			<script src={ naphatsite.StaticRootPath("static/bundle.js") }></script>
+			<script defer src={ naphatsite.StaticRootPath("static/page-files/root/root.js") }></script>
+		</head>
+		<body class="min-h-screen bg-gray-50 font-serif text-gray-700 dark:bg-neutral-900 dark:text-neutral-200">
+			<nav class="sticky top-0 z-10 border-b border-gray-200 bg-white/80 backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-900/80">
+				<div class={ templutils.JoinClasses("mx-auto flex items-center justify-between px-6 py-4", LargeContentWidth) }>
+					<a href={ naphatsite.BasePrefix(ctx) + "index.html" }>
+						<h1 class="text-4xl font-extrabold tracking-tight text-gray-900 italic dark:text-white">The Naphat Times (work in progress...)</h1>
+					</a>
+					<theme-button></theme-button>
+				</div>
+			</nav>
+			<main class={ templutils.JoinClasses("mx-auto flex flex-col gap-14 px-6 py-10", pageWidthClass) }>
+				{ children... }
+			</main>
+		</body>
+	</html>
+}

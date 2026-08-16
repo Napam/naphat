@@ -1,0 +1,24 @@
+dictionaries = ["en_us"]
+words = [
+    "Apato",
+    "Backwego",
+    "Duolingo",
+    "Eiendom",
+    "Giertsen",
+    "Rieber",
+    "Tormod",
+    "Tromsø",
+    "Vannteknologi",
+    "Vaskerelven",
+    "Visito",
+    "aisummary",
+    "apatoad",
+    "linkedin",
+    "naphatsite",
+    "templ",
+    "templcomponents",
+    "templutils",
+    "twmerge",
+    "whoisthisman",
+]
+include_paths = ["web/**/*.templ"]

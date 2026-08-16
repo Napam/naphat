@@ -1,0 +1,13 @@
+package aisummary
+
+templ Summary(items []string) {
+	<section class="dark:bg-primary-800 bg-primary-100 text-primary-700 flex flex-col gap-4 p-6 font-sans dark:text-neutral-300">
+		<h2 class="font-bold">AI Summary</h2>
+		<ul class="list-disc space-y-2 pl-5 text-sm">
+			for _, item := range items {
+				<li>{ item }</li>
+			}
+		</ul>
+		<p class="text-primary-700 text-xs dark:text-neutral-300">Beware, AI generated content may contain errors</p>
+	</section>
+}

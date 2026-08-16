@@ -1,0 +1,264 @@
+version: "3"
+
+env:
+  HOST: "localhost"
+  PORT: "8080"
+  LIVE_RELOAD_PROXY_HOST: "localhost"
+  LIVE_RELOAD_PROXY_PORT: "7331"
+
+tasks:
+  init:
+    desc: Install all tooling and dependencies (go lint, js deps, git hooks)
+    deps:
+      - init.go
+      - init.js
+      - init.hooks
+
+  init.js:
+    desc: Install js dependencies into web/node_modules
+    dir: ./web
+    cmds:
+      - bun install
+
+  init.go:
+    desc: Install the pinned golangci-lint into ./bin
+    vars:
+      GOLANGCI_LINT_VERSION:
+        sh: cat .golangci-version
+    status:
+      - test "$(./bin/golangci-lint version --short 2>/dev/null)" = "{{trimPrefix "v" .GOLANGCI_LINT_VERSION}}"
+    cmds:
+      # installs into ./bin
+      - curl -sSfL https://golangci-lint.run/install.sh | sh -s {{.GOLANGCI_LINT_VERSION}}
+
+  init.hooks:
+    desc: Symlink .hooks as the git hooks directory
+    status:
+      - test "$(readlink .git/hooks)" = "../.hooks"
+    cmds:
+      - rm -rf .git/hooks
+      - ln -s ../.hooks .git/hooks
+
+  update.go:
+    desc: Update go modules, tools and the pinned golangci-lint
+    cmds:
+      - go get -u tool # updates every module in the go.mod tool() directive
+      - go get -u ./...
+      - go mod tidy
+      - task: update.golangci
+
+  update.golangci:
+    # golangci-lint recommends binary installation; go install/tools-pattern
+    # installs aren't guaranteed to work
+    desc: Pin golangci-lint to the latest release (writes .golangci-version).
+    cmds:
+      - |
+        latest=$(curl -sSfL https://api.github.com/repos/golangci/golangci-lint/releases/latest \
+          | grep -o '"tag_name": *"[^"]*"' | grep -o 'v[0-9][0-9.]*')
+        [ -n "$latest" ] || { echo "could not resolve latest golangci-lint version" >&2; exit 1; }
+        echo "$latest" > .golangci-version
+        echo "pinned golangci-lint to $latest"
+
+  update.web:
+    desc: Update js dependencies to their latest versions
+    dir: ./web
+    cmds:
+      - bun update --latest
+      - bun install
+
+  gen.templ:
+    desc: Generate go code from templ templates
+    cmds:
+      - go tool templ generate
+
+  dev:
+    desc: Run all watchers and the live-reloading dev server
+    deps:
+      - init
+    cmds:
+      # refuse to start if orphaned watchers from a previous session hold the proxy port
+      - |
+        if nc -z "$LIVE_RELOAD_PROXY_HOST" "$LIVE_RELOAD_PROXY_PORT" 2>/dev/null; then
+          echo "$LIVE_RELOAD_PROXY_HOST:$LIVE_RELOAD_PROXY_PORT is already in use — another dev session or orphaned watchers?" >&2
+          exit 1
+        fi
+      # Ctrl+C SIGINTs the whole process group; templ tears down the dev-run.sh server
+      - task --parallel dev.tailwind dev.web dev.go
+
+  dev.tailwind:
+    desc: Watch and rebuild tailwind css
+    dir: ./web
+    cmds:
+      # ignore_error: watchers exit non-zero on Ctrl+C, which would falsely
+      # report the stopped dev session as failed
+      - cmd: bunx tailwindcss -i tailwind.css -o static/tailwind.css --watch --minify --cwd .
+        ignore_error: true
+
+  dev.web:
+    desc: Watch and rebuild the js bundle, then notify the templ proxy. Requires templ proxy to be running.
+    dir: ./web
+    cmds:
+      # wait (max ~10s) for the templ proxy from dev.go before wgo's startup
+      # --notify-proxy fires; the notify failure is cosmetic, so proceed anyway
+      - |
+        for _ in $(seq 1 100); do
+          nc -z "$LIVE_RELOAD_PROXY_HOST" "$LIVE_RELOAD_PROXY_PORT" 2>/dev/null && break
+          sleep 0.1
+        done
+      # ignore_error: see dev.tailwind
+      - cmd: |
+          go tool wgo \
+          -debounce=256ms \
+          -xdir=node_modules \
+          -xdir=tmp \
+          -xdir=static \
+          -file='\.ts$' \
+          -file='\.css$' \
+          -file='\.(png|jpe?g|gif|webp|svg|ico|ttf|woff2?|avif|mp4)$' \
+          bun run build.ts :: go tool templ generate --notify-proxy --proxybind=$LIVE_RELOAD_PROXY_HOST --proxyport=$LIVE_RELOAD_PROXY_PORT
+        ignore_error: true
+
+  dev.go:
+    desc: Run the server with templ watch mode and live reload
+    env:
+      TEMPL_DEV_MODE: true
+    cmds:
+      - |
+        go tool templ generate \
+        --log-level=info \
+        --watch \
+        --watch-pattern='(.+\.go$)|(.+\.templ$)' \
+        --path=. \
+        --proxybind=$LIVE_RELOAD_PROXY_HOST \
+        --proxyport=$LIVE_RELOAD_PROXY_PORT \
+        --proxy="http://$HOST:$PORT" \
+        --open-browser=false \
+        --cmd='./scripts/dev-run.sh'
+
+  build.docker.run:
+    desc: Build the docker image and run it
+    cmds:
+      - task: build.docker
+      - |
+        docker run --rm \
+        -e HOST=0.0.0.0 \
+        -e PORT=$PORT \
+        -p $PORT:$PORT \
+        naphatsite:latest
+
+  build.docker:
+    desc: Build the production docker image
+    cmds:
+      - docker build -t naphatsite:latest .
+
+  build.go:
+    desc: Build the production binary with embedded assets into ./bin/app
+    cmds:
+      - task: init.js
+      # the * glob spares web/static/.gitignore (go:embed's * skips dotfiles too)
+      - rm -rf web/static/*
+      - task: build.go.assets
+      - go build -ldflags="-s -w" -trimpath -o ./bin/app ./cmd/serve
+
+  build.go.assets:
+    desc: Generate templ code and build all static web assets
+    deps:
+      - gen.templ
+      - build.tailwind
+      - build.web
+
+  build.tailwind:
+    desc: Build minified tailwind css
+    dir: ./web
+    cmds:
+      - bunx tailwindcss -i tailwind.css -o static/tailwind.css --minify --cwd .
+
+  build.web:
+    desc: Build the production js bundle
+    dir: ./web
+    cmds:
+      - ENV=prod bun run build.ts
+
+  build.site:
+    desc: Build static site into dist/
+    deps:
+      - gen.templ
+      - build.tailwind
+      - build.web
+    cmds:
+      - rm -rf dist
+      - go run -tags=noembed ./cmd/ssg
+
+  check:
+    desc: Run all checks (formatting, linting, compile)
+    deps:
+      - check.go
+      - check.web
+
+  check.go:
+    desc: Go templ generate, lint and compile check (parallel)
+    deps:
+      - init.go
+    cmds:
+      # regenerate so the build catches drift from the committed generated code
+      - go tool templ generate
+      - |
+        go tool templ fmt -fail . & p1=$!
+        go build ./... & p2=$!
+        ./bin/golangci-lint run ./... & p3=$!
+        ec=0
+        wait $p1 || ec=$?
+        wait $p2 || ec=$?
+        wait $p3 || ec=$?
+        exit $ec
+
+  check.web:
+    desc: Prettier, ESLint, TypeScript, and build check (parallel)
+    dir: ./web
+    deps:
+      - init.js
+    cmds:
+      # OUTDIR: don't clobber web/static while a dev session or build is running
+      - |
+        bunx prettier --check . & p1=$!
+        bunx eslint . & p2=$!
+        bunx typescript-7 --noEmit & p3=$!
+        OUTDIR=tmp/check-static bun run build.ts & p4=$!
+        ec=0
+        wait $p1 || ec=$?
+        wait $p2 || ec=$?
+        wait $p3 || ec=$?
+        wait $p4 || ec=$?
+        exit $ec
+
+  fix:
+    desc: Auto-fix all formatting and linting (Go + JS/TS)
+    deps:
+      - fix.go
+      - fix.web
+
+  fix.go:
+    desc: Auto-fix Go linting and formatting issues
+    deps:
+      - init.go
+    cmds:
+      - go tool templ fmt .
+      - ./bin/golangci-lint run --fix
+
+  fix.web:
+    desc: Format and lint-fix JS/TS code (prettier, eslint --fix)
+    dir: ./web
+    deps:
+      - init.js
+    cmds:
+      - bunx prettier --write .
+      - bunx eslint --fix .
+
+  clean:
+    desc: Wipe build artifacts and local caches
+    cmds:
+      - ./bin/golangci-lint cache clean 2>/dev/null || true
+      - rm -rf tmp/*
+      - rm -rf web/node_modules
+      - rm -rf web/static/*
+      - rm -f bin/app bin/dev-app
