@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "sources": ["../../pages/root/root.ts"],
+  "sourcesContent": [
+    "// Page-specific JS for the root page. build.ts bundles this to\n// static/page-files/root/root.js, loaded per-page with <script defer>.\n//\n// Page files enhance server-rendered HTML and must NOT import from lib/:\n// the iife bundle has no code splitting, so lib code would be duplicated and\n// re-registering custom elements throws. bundle.js loads first (in <head>),\n// so components are already registere.\n\n// Progressive enhancement: confirm before submitting any form marked with\n// data-confirm (e.g. the delete buttons). Without JS the form still submits.\ndocument.querySelectorAll<HTMLFormElement>('form[data-confirm]').forEach((form) => {\n  form.addEventListener('submit', (event) => {\n    if (!window.confirm(form.dataset.confirm)) {\n      event.preventDefault()\n    }\n  })\n})\n"
+  ],
+  "mappings": ";;EAUA,SAAS,iBAAkC,oBAAoB,EAAE,QAAQ,CAAC,SAAS;AAAA,IACjF,KAAK,iBAAiB,UAAU,CAAC,UAAU;AAAA,MACzC,IAAI,CAAC,OAAO,QAAQ,KAAK,QAAQ,OAAO,GAAG;AAAA,QACzC,MAAM,eAAe;AAAA,MACvB;AAAA,KACD;AAAA,GACF;",
+  "debugId": "003E3402F7E58A9864756E2164756E21",
+  "names": []
+}

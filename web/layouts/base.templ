@@ -15,15 +15,16 @@ templ Base(pageWidthClass string) {
 	<html class="dark">
 		<head>
 			<title>Naphat Amundsen</title>
+			<meta name="viewport" content="width=device-width, initial-scale=1"/>
 			<link rel="stylesheet" id="tailwindcss" href={ naphatsite.StaticRootPath("static/tailwind.css") }/>
 			<script src={ naphatsite.StaticRootPath("static/bundle.js") }></script>
 			<script defer src={ naphatsite.StaticRootPath("static/page-files/root/root.js") }></script>
 		</head>
 		<body class="min-h-screen bg-gray-50 font-serif text-gray-700 dark:bg-neutral-900 dark:text-neutral-200">
 			<nav class="sticky top-0 z-10 border-b border-gray-200 bg-white/80 backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-900/80">
-				<div class={ templutils.JoinClasses("mx-auto flex items-center justify-between px-6 py-4", LargeContentWidth) }>
-					<a href={ naphatsite.BasePrefix(ctx) + "index.html" }>
-						<h1 class="text-4xl font-extrabold tracking-tight text-gray-900 italic dark:text-white">The Naphat Times (work in progress...)</h1>
+				<div class={ templutils.JoinClasses("mx-auto flex items-center justify-between gap-4 px-6 py-2 sm:py-4", LargeContentWidth) }>
+					<a href={ naphatsite.BasePrefix(ctx) + "index.html" } class="min-w-0">
+						<h1 class="truncate text-xl font-extrabold tracking-tight text-gray-900 italic dark:text-white sm:text-4xl">The Naphat Times<span class="hidden sm:inline">&nbsp;(work in progress...)</span></h1>
 					</a>
 					<theme-button></theme-button>
 				</div>

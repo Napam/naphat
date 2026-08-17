@@ -27,7 +27,7 @@ templ ContactIcons() {
 }
 
 templ Page() {
-	@layouts.Base(layouts.SmallContentWidth) {
+	@layouts.Base(layouts.MediumContentWidth) {
 		<div class="mt-4">
 			<header class="mb-6">
 				<div class="mb-4">
@@ -42,7 +42,7 @@ templ Page() {
 				</div>
 				<div class="text-gray-500 dark:text-neutral-400">
 					<img
-						class="mb-2 size-full h-160 object-cover object-[0px_100%]"
+						class="mb-2 size-full h-120 object-cover object-[0px_50%] sm:h-160"
 						src={ naphatsite.StaticRootPath("static/assets/naphat-portrait-2.png") }
 					/>
 					<p class="mb-2">A portrait of Naphat</p>
@@ -140,15 +140,15 @@ templ Page() {
 								</div>
 							</dl>
 						</div>
-						<div class="flex gap-4">
+						<div class="flex flex-col gap-4 md:flex-row">
 							<p>
 								Today, Naphat works as a Senior Consultant at Visito AS, a
 								Bergen based IT consultancy, delivering projects requiring
 								everything from fullstack software development to machine
 								learning and AI.
 							</p>
-							<div class="flex flex-col items-center text-gray-400 dark:text-neutral-400">
-								<img class="mb-2 w-140" src={ naphatsite.StaticRootPath("static/assets/visito.ico") }/>
+							<div class="flex w-full flex-col items-center text-gray-400 md:w-auto dark:text-neutral-400">
+								<img class="mb-2 w-32 md:w-140" src={ naphatsite.StaticRootPath("static/assets/visito.ico") }/>
 								<dl class="text-sm font-thin">
 									<div class="flex flex-row gap-2">
 										<dt>Photo:</dt>
@@ -159,7 +159,7 @@ templ Page() {
 						</div>
 						<div class="">
 							<div class="text-gray-400 dark:text-neutral-400">
-								<img class="mb-2 w-140" src={ naphatsite.StaticRootPath("static/assets/naphat-portrait-wide.jpg") }/>
+								<img class="mb-2 w-full max-w-140" src={ naphatsite.StaticRootPath("static/assets/naphat-portrait-wide.jpg") }/>
 								<p class="mb-2 text-sm">
 									Naphat standing on the balcony of the Visito offices at Vaskerelven in Bergen.
 								</p>
