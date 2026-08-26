@@ -38,17 +38,30 @@ templ RootPage() {
 				</a>
 			</article>
 		</div>
-		<article>
-			<!-- Neural networks article -->
-			<a href="articles/neural-networks-a-geometric-interpretation.html" class="block">
-				<div class={ templutils.JoinClasses("overflow-hidden border border-gray-300 dark:border-neutral-600", imgBottomMarginClass) }>
-					<img class="w-full object-contain" src={ naphatsite.StaticRootPath("static/assets/nnarticle/perceptron.png") } alt="A diagram illustrating a perceptron"/>
-				</div>
-				<h2 class="font-sans text-4xl font-bold sm:text-5xl">
-					You would not believe what neural networks do
-				</h2>
-			</a>
-		</article>
+		<div class="flex w-full flex-col gap-10 lg:flex-row">
+			<article class="flex-1">
+				<!-- Neural networks article -->
+				<a href="articles/neural-networks-a-geometric-interpretation.html" class="block">
+					<div class={ templutils.JoinClasses("overflow-hidden border border-gray-300 dark:border-neutral-600", imgBottomMarginClass) }>
+						<img class="w-full object-contain" src={ naphatsite.StaticRootPath("static/assets/nnarticle/perceptron.png") } alt="A diagram illustrating a perceptron"/>
+					</div>
+					<h2 class="font-sans text-4xl font-bold sm:text-5xl">
+						You would not believe what neural networks do
+					</h2>
+				</a>
+			</article>
+			<article class="flex-1">
+				<!-- Why bother using Vim -->
+				<a href="articles/why-bother-using-vim.html" class="block">
+					<div class={ templutils.JoinClasses("flex items-center justify-center overflow-hidden border border-gray-300 bg-gray-100 p-8 dark:border-neutral-700 dark:bg-neutral-800", imgBottomMarginClass) }>
+						<vim-logo-icon svgClass="h-40 w-40 sm:h-56 sm:w-56 dark:brightness-[1.45]"></vim-logo-icon>
+					</div>
+					<h2 class="font-sans text-4xl font-bold sm:text-5xl">
+						Man calls Vim his “happy place”. Doctors concerned.
+					</h2>
+				</a>
+			</article>
+		</div>
 		<section class="flex w-full flex-col gap-4 bg-cyan-200 p-6 font-mono text-gray-900 sm:p-10 dark:bg-cyan-400">
 			<!-- Backwego template ad -->
 			<h2 class="mb-2 text-2xl font-bold">

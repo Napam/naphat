@@ -7,6 +7,7 @@ import (
 
 	"naphatsite/web/pages/articles/apato-ad"
 	"naphatsite/web/pages/articles/neural-networks-a-geometric-interpretation"
+	"naphatsite/web/pages/articles/why-bother-using-vim"
 	"naphatsite/web/pages/articles/whoisthisman"
 	"naphatsite/web/pages/root"
 )
@@ -25,6 +26,7 @@ var Pages = []Page{
 	{Path: "/articles/who-is-this-man", Render: whoisthisman.Page().Render},
 	{Path: "/articles/apato-ad", Render: apatoad.Page().Render},
 	{Path: "/articles/neural-networks-a-geometric-interpretation", Render: neuralnetworksageometricinterpretation.Page().Render},
+	{Path: "/articles/why-bother-using-vim", Render: whybotherusingvim.Page().Render},
 }
 
 // FilePath derives the static output file from the URL path as a flat file:
