@@ -11,9 +11,7 @@ HTML plus asset files.
 
 Requirements:
 
-- [go](https://go.dev)
-- [task](https://taskfile.dev)
-- [bun](https://bun.com/) - for frontend asset building
+- [mise](https://mise.jdx.dev) for development environment setup - mise must be [activated](https://mise.jdx.dev/getting-started.html#activate-mise).
 
 ## Develop
 
@@ -52,6 +50,7 @@ Asset URLs in the rendered pages are depth-relative (`static/...` or
 │   └── ssg               static site generator → docs/
 ├── docs                  static site output, committed and deployed to GitHub Pages
 ├── lib                   shared go libraries (env, hashfs, logging, templutils)
+├── mise.toml           dev environment config
 ├── Taskfile.yml          all tasks
 ├── web
 │   ├── assets            source assets, hardlinked into static/assets
