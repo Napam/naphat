@@ -2,9 +2,9 @@ version: "3"
 
 env:
   HOST: "localhost"
-  PORT: "8080"
+  PORT: "2080"
   LIVE_RELOAD_PROXY_HOST: "localhost"
-  LIVE_RELOAD_PROXY_PORT: "7331"
+  LIVE_RELOAD_PROXY_PORT: "2081"
 
 tasks:
   init:

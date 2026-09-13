@@ -31,5 +31,6 @@ words = [
     "templutils",
     "twmerge",
     "whoisthisman",
+    "whybotherusingvim",
 ]
 include_paths = ["web/**/*.templ"]
